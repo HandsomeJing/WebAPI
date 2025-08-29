@@ -58,3 +58,9 @@ Thumbs.db
 # 配置文件中的敏感信息
 appsettings.Production.json
 appsettings.Development.json
+
+# Git自动保存脚本（不纳入项目管理）
+auto-save*.ps1
+watch-git.ps1
+auto-git.ps1
+Git使用指南.md
