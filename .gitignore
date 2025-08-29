@@ -64,3 +64,5 @@ auto-save*.ps1
 watch-git.ps1
 auto-git.ps1
 Git使用指南.md
+
+.fake

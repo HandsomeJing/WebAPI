@@ -259,7 +259,7 @@ namespace DearlerPlatform.Core
                 entity.Property(e => e.BelongTypeName)
                     .IsRequired()
                     .HasMaxLength(100)
-                    .IsUnicode(false);
+                    .IsUnicode();
 
                 entity.Property(e => e.BelongTypeNo)
                     .IsRequired()
