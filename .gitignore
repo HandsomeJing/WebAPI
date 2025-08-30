@@ -83,3 +83,7 @@ dearler_platform_ui/.eslintcache
 dearler_platform_ui/.npm/
 dearler_platform_ui/.pnpm-store/
 dearler_platform_ui/.env*
+
+# 本地自动化脚本（不纳入仓库）
+tools-local/
+tools-local/**
