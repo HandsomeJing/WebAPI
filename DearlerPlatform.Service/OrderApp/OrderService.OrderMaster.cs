@@ -23,6 +23,8 @@ namespace DearlerPlatform.Service.OrderApp
                 // 添加主订单
                 DateTime inputDate = DateTime.Now;
                 string orderNo = Guid.NewGuid().ToString();
+                // 按照业务：使用第一个商品的销售配置中的仓库作为发货仓库
+                var firstStockNo = carts.FirstOrDefault()?.ProductDto?.ProductSale?.StockNo ?? string.Empty;
                 SaleOrderMaster master = new SaleOrderMaster
                 {
                     CustomerNo = customerNo,
@@ -32,7 +34,7 @@ namespace DearlerPlatform.Service.OrderApp
                     Remark = input.Remark,
                     InvoiceNo = input.invoice,
                     SaleOrderNo = orderNo,
-                    StockNo = ""
+                    StockNo = firstStockNo
                 };
                 await OrderMasterRepo.InsertAsync(master);
                 // 添加流程

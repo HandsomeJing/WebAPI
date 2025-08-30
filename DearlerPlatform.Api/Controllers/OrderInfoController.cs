@@ -34,5 +34,17 @@ namespace DearlerPlatfrom.Api.Controllers
             // var customerNo = HttpContext.Items[HttpContextItemKeyName.CUSTOMER_NO].ToString();
            return await OrderService.GetOrderInfoByOrderNo(orderNo);
         }
+
+        /// <summary>
+        /// 再次购买
+        /// 根据原订单号复制生成一笔新订单
+        /// </summary>
+        /// <param name="saleOrderNo">原订单号</param>
+        /// <returns>是否成功</returns>
+        [HttpGet("BuyAgain")]
+        public async Task<bool> BuyAgain(string saleOrderNo)
+        {
+            return await OrderService.BuyAgain(saleOrderNo);
+        }
     }
 }

@@ -220,7 +220,32 @@ namespace DearlerPlatform.Service.ProductApp
                     ctos.Add(res);
                 }
             }
-            return Task.FromResult(Mapper.Map<List<ProductCto>, List<ProductDto>>(ctos));
+            // 映射回前端 DTO
+            var dtos = Mapper.Map<List<ProductCto>, List<ProductDto>>(ctos);
+            // 补齐缺失图片：当缓存老数据没有图片时，从库中加载并回写缓存
+            var needPhotoNos = dtos.Where(d => string.IsNullOrWhiteSpace(d.ProductPhoto?.ProductPhotoUrl))
+                                   .Select(d => d.ProductNo)
+                                   .Distinct()
+                                   .ToArray();
+            if (needPhotoNos.Length > 0)
+            {
+                var photos = GetProductPhotosByProductNo(needPhotoNos).Result;
+                foreach (var dto in dtos)
+                {
+                    if (string.IsNullOrWhiteSpace(dto.ProductPhoto?.ProductPhotoUrl))
+                    {
+                        var photo = photos.FirstOrDefault(p => p.ProductNo == dto.ProductNo);
+                        if (photo != null)
+                        {
+                            dto.ProductPhoto = photo;
+                            // 回写缓存，保持一致
+                            var cto = Mapper.Map<ProductDto, ProductCto>(dto);
+                            RedisWorker.SetHashMemory<ProductCto>($"{RedisKeyName.PRODUCT_KEY}:{dto.ProductNo}", cto);
+                        }
+                    }
+                }
+            }
+            return Task.FromResult(dtos);
         }
         public async Task<List<ProductDto>> GetProductByProductNos(params string[] postProductNos)
         {
@@ -228,9 +253,11 @@ namespace DearlerPlatform.Service.ProductApp
             var products = await ProductRepo.GetListAsync(m => productNos.Contains(m.ProductNo));
             var productDtos = Mapper.Map<List<Product>, List<ProductDto>>(products);
             var ProductSales = await GetProductSalesByProductNo(productDtos.Select(m => m.ProductNo).ToArray());
+            var productPhotos = await GetProductPhotosByProductNo(productDtos.Select(m => m.ProductNo).ToArray());
             productDtos.ForEach(p =>
             {
                 p.ProductSale = ProductSales.FirstOrDefault(m => m.ProductNo == p.ProductNo) ?? new();
+                p.ProductPhoto = productPhotos.FirstOrDefault(m => m.ProductNo == p.ProductNo) ?? new();
             });
             return productDtos;
         }

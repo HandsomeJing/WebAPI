@@ -66,3 +66,20 @@ auto-git.ps1
 Git使用指南.md
 
 .fake
+
+# 前端常见产物（统一忽略）
+dealer-platform-web/node_modules/
+dealer-platform-web/dist/
+dealer-platform-web/.vite/
+dealer-platform-web/.eslintcache
+dealer-platform-web/.npm/
+dealer-platform-web/.pnpm-store/
+dealer-platform-web/.env*
+
+dearler_platform_ui/node_modules/
+dearler_platform_ui/dist/
+dearler_platform_ui/.vite/
+dearler_platform_ui/.eslintcache
+dearler_platform_ui/.npm/
+dearler_platform_ui/.pnpm-store/
+dearler_platform_ui/.env*

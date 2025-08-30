@@ -12,25 +12,43 @@ namespace DearlerPlatform.Common.RedisModule
     /// </summary>
     public class RedisCore
     {
-        public ConnectionMultiplexer Conn { get; set; }
-        public IDatabase Db { get; set; }
+    public ConnectionMultiplexer? Conn { get; set; }
+    public IDatabase? Db { get; set; }
+    public bool IsAvailable { get; private set; } = false;
         
         /// <summary>
         /// 初始化Redis连接 - 建立与Redis服务器的连接
         /// </summary>
         public RedisCore(IConfiguration configuration)
         {
-            var redisConnectionStr = configuration["Redis"] ?? throw new ArgumentNullException("Redis连接字符串不能为空");
-            ConfigurationOptions configurationOptions = ConfigurationOptions.Parse(redisConnectionStr);
-            // 允许管理员权限，这样才能进行模糊搜索Key等高级操作
-            configurationOptions.AllowAdmin = true;
-            Conn = ConnectionMultiplexer.Connect(configurationOptions);
-            Db = Conn.GetDatabase();
+            var redisConnectionStr = configuration["Redis"];
+            if (string.IsNullOrWhiteSpace(redisConnectionStr))
+            {
+                // 没有配置Redis，直接降级为不可用状态
+                IsAvailable = false;
+                return;
+            }
+            try
+            {
+                var configurationOptions = ConfigurationOptions.Parse(redisConnectionStr);
+                configurationOptions.AllowAdmin = true;
+                // 连接失败不抛异常，进入重试/降级模式
+                configurationOptions.AbortOnConnectFail = false;
+                Conn = ConnectionMultiplexer.Connect(configurationOptions);
+                Db = Conn.GetDatabase();
+                IsAvailable = Conn != null;
+            }
+            catch
+            {
+                // 降级：后续通过 IsAvailable 判断，避免抛 500
+                IsAvailable = false;
+            }
         }
         
         /// <summary>删除指定的Redis key</summary>
         public void RemoveKey(string key)
         {
+            if (!IsAvailable || Db == null) return;
             Db.KeyDelete(key);
         }
     }

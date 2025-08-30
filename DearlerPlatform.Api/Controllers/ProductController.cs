@@ -71,17 +71,17 @@ public class ProductController : BaseController
     [HttpGet("BlongType")]
     public async Task<List<BlongTypeDto>> GetBlongType()
     {
-        return await ProductService.GetBlongTypeDtosAsync();
+    return await ProductService.GetBlongTypeDtosAsync();
     }
     [HttpGet("type")]
     public async Task<IEnumerable<ProductTypeDto>> GetProductTypeDtosAsync(string belongTypeName)
     {
-        return await ProductService.GetProductType(belongTypeName);
+    return await ProductService.GetProductType(belongTypeName);
     }
     [HttpGet("props")]
     public async Task<Dictionary<string, IEnumerable<string>>> GetProductProps(string belongTypeName, string? typeNo)
     {
-        return await ProductService.GetProductProps(belongTypeName, typeNo);
+    return await ProductService.GetProductProps(belongTypeName, typeNo);
     }
 
 

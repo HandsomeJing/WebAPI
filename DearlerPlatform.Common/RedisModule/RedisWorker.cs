@@ -21,6 +21,7 @@ namespace DearlerPlatform.Common.RedisModule
         /// <returns></returns>
         public List<string> GetKeys(string key)
         {
+            if (!RedisCore.IsAvailable || RedisCore.Conn == null) return new List<string>();
             List<string> keyList = new();
             var eps = RedisCore.Conn.GetEndPoints();
             var ep = eps[0];
@@ -37,6 +38,7 @@ namespace DearlerPlatform.Common.RedisModule
 
         public void RemoveKey(string key)
         {
+            if (!RedisCore.IsAvailable || RedisCore.Db == null) return;
             RedisCore.Db.KeyDelete(key);
         }
     }

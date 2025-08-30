@@ -11,8 +11,8 @@ Write-Host ""
 
 function Save-DearlerProject {
     try {
-        # 只添加项目相关文件，排除脚本
-        git add "DearlerPlatform.*/" "*.sln" 2>$null
+    # 只添加项目相关文件，排除脚本；同时纳入前端目录（dearler_platform_ui）
+    git add "DearlerPlatform.*/" "dearler_platform_ui/" "*.sln" 2>$null
         
         # 检查是否有变更
         $status = git diff --cached --name-only 2>$null

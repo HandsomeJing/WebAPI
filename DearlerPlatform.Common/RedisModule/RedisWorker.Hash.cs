@@ -28,6 +28,7 @@ namespace DearlerPlatform.Common.RedisModule
         /// </summary>
         public void SetHashMemory(string key, params HashEntry[] entries)
         {
+            if (!RedisCore.IsAvailable || RedisCore.Db == null) return;
             RedisCore.Db.HashSet(key, entries);
         }
 
@@ -37,6 +38,7 @@ namespace DearlerPlatform.Common.RedisModule
         /// </summary>
         public void SetHashMemory<T>(string key, T entity, Type? type = null)
         {
+            if (!RedisCore.IsAvailable || RedisCore.Db == null) return;
             type ??= typeof(T);
             List<HashEntry> hashEntntries = new();
             PropertyInfo[] props = type.GetProperties();
@@ -57,6 +59,7 @@ namespace DearlerPlatform.Common.RedisModule
 
         public void SetHashMemory<T>(string key, IEnumerable<T> entities, Func<T, IEnumerable<string>> func)
         {
+            if (!RedisCore.IsAvailable) return;
             Type type = typeof(T);
             foreach (var entity in entities)
             {
@@ -73,6 +76,7 @@ namespace DearlerPlatform.Common.RedisModule
 
         public List<T> GetHashMemory<T>(string keyLike) where T : new()
         {
+            if (!RedisCore.IsAvailable || RedisCore.Db == null) return new List<T>();
             var keys = GetKeys(keyLike);
             List<T> ts = new();
             foreach (var key in keys)

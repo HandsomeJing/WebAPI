@@ -47,6 +47,18 @@ namespace DearlerPlatfrom.Api.Controllers
           var carts = (await ShoppingCartAppService.GetShoppingCartDtos(customerNo)).Where(m=>m.CartSelected);
           return carts;
         }
+
+        /// <summary>
+        /// 获取当前客户最近订单号
+        /// 用于前端下单成功后跳转到订单详情页
+        /// </summary>
+        /// <returns>最近订单号（无则返回空字符串）</returns>
+        [HttpGet("LatestOrderNo")]
+        public async Task<string> GetLatestOrderNo()
+        {
+            var customerNo = HttpContext.Items[HttpContextItemKeyName.CUSTOMER_NO]?.ToString() ?? string.Empty;
+            return await OrderService.GetLatestOrderNo(customerNo);
+        }
         [HttpPost]
         public async Task<bool> Add(OrderMasterInputDto input)
         {

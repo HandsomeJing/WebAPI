@@ -19,6 +19,12 @@ namespace DearlerPlatform.Service.OrderApp
         );
 
         Task<SaleOrderDto> GetOrderInfoByOrderNo(string orderNo);
+    /// <summary>
+    /// 获取指定客户最近一次下单生成的订单号
+    /// </summary>
+    /// <param name="customerNo">客户编号</param>
+    /// <returns>订单号(若无则返回空字符串)</returns>
+    Task<string> GetLatestOrderNo(string customerNo);
         Task<bool> BuyAgain(string SaleOrderNo);
     }
 }

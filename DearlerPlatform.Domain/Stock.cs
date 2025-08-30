@@ -5,9 +5,8 @@ using System.Collections.Generic;
 
 namespace DearlerPlatform.Domain
 {
-    public partial class Stock
+    public partial class Stock : BaseEntity
     {
-        public int Id { get; set; }
         public string StockNo { get; set; }
         public string StockName { get; set; }
         public string StockLinkman { get; set; }
