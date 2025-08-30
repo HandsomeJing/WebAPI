@@ -9,6 +9,9 @@ namespace DearlerPlatform.Service.OrderApp;
 
 public partial class OrderService
 {
+    /// <summary>
+    /// 批量写入订单明细
+    /// </summary>
     private async Task AddOrderDetail(List<ShoppingCartDto> carts,
     string customerNo,
     string orderNo,

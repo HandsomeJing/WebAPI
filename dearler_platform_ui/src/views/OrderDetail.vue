@@ -44,7 +44,7 @@
         <span>交货日期</span>{{ transTime(order?.deliveryDate, false) }}
       </p>
       <p class="order-submit">
-        <button class="order-cancel">
+        <button class="order-cancel" @click="onCancelOrder">
           取消订单
         </button>
         <button class="buy-again" @click="onBuyAgain">
@@ -59,7 +59,7 @@
         </span>
       </p>
       <p class="order-set-item"><span>备注</span>{{order?.remark}}</p>
-      <p class="order-set-item"><span>开票人</span>{{order?.invoiceNo}}</p>
+  <p class="order-set-item"><span>开票人</span>{{ order?.customerInvoice?.invoiceNo || order?.invoiceNo || '-' }}</p>
       <!-- 仓库信息（由后端根据 StockNo 计算填充） -->
       <p class="order-set-item"><span>发货仓库</span>{{order?.stockName || '-'}}</p>
       <p class="order-set-item"><span>发货联系人</span>{{order?.stockLinkman || '-'}}</p>
@@ -71,7 +71,7 @@
 import { transPrice, transTime } from '../utility/common'
 import PageHead from '../components/PageHead.vue'
 import { OrderInfo } from '@/interfaces/OrderDetail'
-import { getOrderInfo, buyAgain } from '@/HttpRequests/OrderDetailRequest'
+import { getOrderInfo, buyAgain, cancelOrder } from '@/HttpRequests/OrderDetailRequest'
 import { computed, onMounted, reactive, ref, toRefs } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
@@ -92,13 +92,29 @@ const onBuyAgain = async ()=>{
   try {
     const ok = await buyAgain(orderNo)
     if (ok) {
-      ElMessage.success('已创建同款新订单，去购物车查看')
+      ElMessage.success('已再次添加到购物车')
       router.push('/layoutMain/shoppingCart')
     } else {
       ElMessage.warning('无法再次购买，请稍后重试')
     }
   } catch (e) {
     ElMessage.error('再次购买失败')
+  }
+}
+// 取消订单：调用后端删除订单数据，然后回购物车
+const onCancelOrder = async ()=>{
+  const orderNo = orderInfo.order?.saleOrderNo
+  if (!orderNo) return
+  try{
+    const ok = await cancelOrder(orderNo)
+    if(ok){
+      ElMessage.success('订单已取消')
+      router.push('/layoutMain/shoppingCart')
+    }else{
+      ElMessage.warning('取消失败，请稍后再试')
+    }
+  }catch(e){
+    ElMessage.error('取消订单异常')
   }
 }
 const route = useRoute()

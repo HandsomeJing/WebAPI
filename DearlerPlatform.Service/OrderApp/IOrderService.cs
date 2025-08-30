@@ -12,12 +12,21 @@ namespace DearlerPlatform.Service.OrderApp
     /// </summary>
     public interface IOrderService : IocTag
     {
+    /// <summary>
+    /// 新增订单
+    /// </summary>
+    /// <param name="customerNo">客户编号</param>
+    /// <param name="input">下单信息（交货日期、备注、发票）</param>
+    /// <param name="carts">购物车中勾选的商品</param>
         Task<bool> AddOrder(
             string customerNo,
             OrderMasterInputDto input,
             List<ShoppingCartDto> carts
         );
 
+    /// <summary>
+    /// 按订单号获取订单详情（含明细、进度、统计字段）
+    /// </summary>
         Task<SaleOrderDto> GetOrderInfoByOrderNo(string orderNo);
     /// <summary>
     /// 获取指定客户最近一次下单生成的订单号
@@ -25,6 +34,26 @@ namespace DearlerPlatform.Service.OrderApp
     /// <param name="customerNo">客户编号</param>
     /// <returns>订单号(若无则返回空字符串)</returns>
     Task<string> GetLatestOrderNo(string customerNo);
-        Task<bool> BuyAgain(string SaleOrderNo);
+
+    /// <summary>
+    /// 再次购买：把历史订单明细重新加入该客户购物车
+    /// </summary>
+    /// <param name="SaleOrderNo">历史订单号</param>
+    /// <param name="customerNo">客户编号</param>
+    Task<bool> BuyAgain(string SaleOrderNo, string customerNo);
+
+    /// <summary>
+    /// 获取客户最近订单列表（含汇总）
+    /// </summary>
+    Task<IEnumerable<SaleOrderDto>> GetOrdersByCustomer(string customerNo, int take = 20);
+    /// <summary>
+    /// 取消订单并清理相关明细与进度
+    /// </summary>
+    /// <param name="saleOrderNo">订单号</param>
+    /// <returns>是否成功</returns>
+    /// <summary>
+    /// 取消订单：删除主/明细/进度，并清空该客户购物车
+    /// </summary>
+    Task<bool> CancelOrder(string saleOrderNo, string customerNo);
     }
 }

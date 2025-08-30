@@ -51,7 +51,7 @@ namespace DearlerPlatform.Core
 
         /// <summary>
         /// 配置实体映射关系 - 定义表结构、约束、关系等
-        /// 这些配置通常由EF Core工具自动生成
+        /// 这些配置由EF Core工具自动生成
         /// </summary>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -180,7 +180,7 @@ namespace DearlerPlatform.Core
 
                 entity.Property(e => e.InvoiceNo)
                     .HasMaxLength(100)
-                    .IsUnicode(false);
+                    .IsUnicode();
 
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
@@ -331,7 +331,7 @@ namespace DearlerPlatform.Core
                 entity.Property(e => e.ProductName)
                     .IsRequired()
                     .HasMaxLength(200)
-                    .IsUnicode(false);
+                    .IsUnicode();
 
                 entity.Property(e => e.ProductNote)
                     .IsRequired()
@@ -466,7 +466,7 @@ namespace DearlerPlatform.Core
 
                 entity.Property(e => e.ProductName)
                     .HasMaxLength(40)
-                    .IsUnicode(false);
+                    .IsUnicode();
 
                 entity.Property(e => e.ProductNo)
                     .IsRequired()
@@ -510,7 +510,7 @@ namespace DearlerPlatform.Core
                 entity.Property(e => e.InvoiceNo)
                     .IsRequired()
                     .HasMaxLength(40)
-                    .IsUnicode(false);
+                    .IsUnicode();
 
                 entity.Property(e => e.Remark)
                     .HasMaxLength(50)
@@ -539,7 +539,7 @@ namespace DearlerPlatform.Core
                 entity.Property(e => e.StepName)
                     .IsRequired()
                     .HasMaxLength(100)
-                    .IsUnicode(false);
+                    .IsUnicode();
 
                 entity.Property(e => e.StepTime).HasColumnType("datetime");
             });
@@ -581,12 +581,12 @@ namespace DearlerPlatform.Core
                 entity.Property(e => e.StockLinkman)
                     .IsRequired()
                     .HasMaxLength(40)
-                    .IsUnicode(false);
+                    .IsUnicode();
 
                 entity.Property(e => e.StockName)
                     .IsRequired()
                     .HasMaxLength(100)
-                    .IsUnicode(false);
+                    .IsUnicode();
 
                 entity.Property(e => e.StockPhone)
                     .IsRequired()

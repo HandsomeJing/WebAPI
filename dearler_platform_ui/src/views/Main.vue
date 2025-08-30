@@ -57,7 +57,7 @@ export default {
   setup () {
     const store = useStore()
     const router = useRouter()
-    const goOrders = () => router.push('/layoutMain/orderDetail')
+  const goOrders = () => router.push('/layoutMain/orderList')
     const goCart = () => router.push('/layoutMain/shoppingCart')
     const logout = () => {
       localStorage.removeItem('token')

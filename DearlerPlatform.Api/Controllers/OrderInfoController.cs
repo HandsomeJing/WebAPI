@@ -36,6 +36,18 @@ namespace DearlerPlatfrom.Api.Controllers
         }
 
         /// <summary>
+        /// 订单列表（最近N条）
+        /// </summary>
+        /// <param name="take">返回条数，默认20</param>
+        /// <returns></returns>
+        [HttpGet("List")]
+        public async Task<IEnumerable<SaleOrderDto>> List(int take = 20)
+        {
+            var customerNo = HttpContext.Items[HttpContextItemKeyName.CUSTOMER_NO]?.ToString() ?? string.Empty;
+            return await OrderService.GetOrdersByCustomer(customerNo, take);
+        }
+
+        /// <summary>
         /// 再次购买
         /// 根据原订单号复制生成一笔新订单
         /// </summary>
@@ -44,7 +56,21 @@ namespace DearlerPlatfrom.Api.Controllers
         [HttpGet("BuyAgain")]
         public async Task<bool> BuyAgain(string saleOrderNo)
         {
-            return await OrderService.BuyAgain(saleOrderNo);
+            var customerNo = HttpContext.Items[HttpContextItemKeyName.CUSTOMER_NO]?.ToString() ?? string.Empty;
+            return await OrderService.BuyAgain(saleOrderNo, customerNo);
+        }
+
+        /// <summary>
+        /// 取消订单
+        /// 删除该订单的主表、明细、进度，并清理购物车选中项（如有关联）
+        /// </summary>
+        /// <param name="saleOrderNo">订单号</param>
+        /// <returns>是否成功</returns>
+        [HttpPost("Cancel")]
+        public async Task<bool> Cancel(string saleOrderNo)
+        {
+            var customerNo = HttpContext.Items[HttpContextItemKeyName.CUSTOMER_NO]?.ToString() ?? string.Empty;
+            return await OrderService.CancelOrder(saleOrderNo, customerNo);
         }
     }
 }

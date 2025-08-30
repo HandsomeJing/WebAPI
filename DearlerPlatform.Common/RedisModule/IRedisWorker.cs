@@ -14,6 +14,11 @@ namespace DearlerPlatform.Common.RedisModule
     {
         /// <summary>删除指定的缓存key</summary>
         void RemoveKey(string key);
+    /// <summary>
+    /// 通过通配符扫描并返回匹配的所有键名
+    /// 例如：cart:*:{customerNo}
+    /// </summary>
+    List<string> GetKeys(string key);
         /// <summary>获取字符串类型的缓存值</summary>
         string GetString(string key);
         /// <summary>异步获取字符串类型的缓存值</summary>

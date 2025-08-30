@@ -16,7 +16,7 @@
       </router-link> -->
     </div>
     <div class="login-bottom">
-      &copy;全栈ACE
+      @陕西吴彦祖
     </div>
   </div>
 </template>

@@ -11,7 +11,10 @@ namespace DearlerPlatform.Service.OrderApp
 {
     public partial class OrderService
     {
-        public async Task<bool> AddOrder(
+    /// <summary>
+    /// 新增订单：写入主表、流程与明细，并在成功后清理购物车中已下单的项
+    /// </summary>
+    public async Task<bool> AddOrder(
             string customerNo,
             OrderMasterInputDto input,
             List<ShoppingCartDto> carts
