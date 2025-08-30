@@ -36,7 +36,10 @@ namespace DearlerPlatform.Service.CustomerApp
         public IRepository<CustomerPwd> CustomerPwdRepo { get; }
         public IMapper Mapper { get; }
 
-        public async Task<Customer?> GetCustomerAsync(string customerNo){
+    /// <summary>
+    /// 按客户号获取客户基本信息。
+    /// </summary>
+    public async Task<Customer?> GetCustomerAsync(string customerNo){
             return await CustomerRepo.GetAsync(m=>m.CustomerNo == customerNo);
         }
     }

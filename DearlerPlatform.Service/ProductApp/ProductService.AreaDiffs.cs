@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 namespace DearlerPlatform.Service.ProductApp
 {
+
     public partial class ProductService
     {
-     
+
     }
 }

@@ -87,3 +87,7 @@ dearler_platform_ui/.env*
 # 本地自动化脚本（不纳入仓库）
 tools-local/
 tools-local/**
+
+# 保持本地私密文档，不入库
+# 如需在仓库中提供公共文档，请使用 wiki 或单独的 docs-public 目录
+/docs/

@@ -18,7 +18,10 @@ namespace DearlerPlatform.Service.OrderApp
     /// <param name="customerNo">客户编号</param>
     /// <param name="input">下单信息（交货日期、备注、发票）</param>
     /// <param name="carts">购物车中勾选的商品</param>
-        Task<bool> AddOrder(
+    /// <summary>
+    /// 新增订单（含流程与明细落库，并清理购物车）。
+    /// </summary>
+    Task<bool> AddOrder(
             string customerNo,
             OrderMasterInputDto input,
             List<ShoppingCartDto> carts
@@ -27,6 +30,9 @@ namespace DearlerPlatform.Service.OrderApp
     /// <summary>
     /// 按订单号获取订单详情（含明细、进度、统计字段）
     /// </summary>
+        /// <summary>
+        /// 按订单号获取订单详情（含进度、明细与汇总字段）。
+        /// </summary>
         Task<SaleOrderDto> GetOrderInfoByOrderNo(string orderNo);
     /// <summary>
     /// 获取指定客户最近一次下单生成的订单号

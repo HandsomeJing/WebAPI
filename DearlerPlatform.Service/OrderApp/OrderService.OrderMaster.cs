@@ -12,7 +12,8 @@ namespace DearlerPlatform.Service.OrderApp
     public partial class OrderService
     {
     /// <summary>
-    /// 新增订单：写入主表、流程与明细，并在成功后清理购物车中已下单的项
+    /// 新增订单：写主表、流程与明细；成功后清理购物车中已下单的项。
+    /// 仓库默认取首个商品的销售配置；订单号用 Guid。
     /// </summary>
     public async Task<bool> AddOrder(
             string customerNo,
@@ -40,13 +41,13 @@ namespace DearlerPlatform.Service.OrderApp
                     StockNo = firstStockNo
                 };
                 await OrderMasterRepo.InsertAsync(master);
-                // 添加流程
+                // 添加流程（记录“下单”步骤）
                 await AddProgress(orderNo, inputDate);
-                // 添加订单详情
+                // 添加订单详情（逐条写入）
                 await AddOrderDetail(carts, customerNo, orderNo, inputDate);
                 // 提交事务
                 ts.Complete();
-                // 删除Redis中的购物车数据
+                // 删除Redis中的购物车数据（已下单的勾选项）
                 foreach (var cart in carts)
                 {
                     RedisWorker.RemoveKey($"cart:{cart.CartGuid}:{customerNo}");

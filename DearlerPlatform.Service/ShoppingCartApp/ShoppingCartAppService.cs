@@ -40,7 +40,11 @@ namespace DearlerPlatform.Service.ShoppingCartApp
             RedisCore = redisCore;
         }
 
-        public Task<ShoppingCart> SetShoppingCart(ShoppingCartInputDto input)
+    /// <summary>
+    /// 加入购物车（若已存在同商品则数量+1；首次加入生成 CartGuid 并默认勾选）。
+    /// 说明：数据落在 Redis，键格式 cart:{CartGuid}:{CustomerNo}
+    /// </summary>
+    public Task<ShoppingCart> SetShoppingCart(ShoppingCartInputDto input)
         {
             ShoppingCart? shoppingCartRes = null;
             // var shoppingCart = await CartRepo.GetAsync(m => m.ProductNo == input.ProductNo);
@@ -64,7 +68,10 @@ namespace DearlerPlatform.Service.ShoppingCartApp
             return Task.FromResult(shoppingCartRes ?? new());
         }
 
-        public async Task<List<ShoppingCartDto>> GetShoppingCartDtos(string customerNo)
+    /// <summary>
+    /// 获取用户购物车（聚合 Redis 中 cart:*:{customerNo}），并通过事件总线补齐商品详情。
+    /// </summary>
+    public async Task<List<ShoppingCartDto>> GetShoppingCartDtos(string customerNo)
         {
             // var carts = await CartRepo.GetListAsync(m => m.CustomerNo == customerNo);
             var carts = RedisWorker.GetHashMemory<ShoppingCart>($"cart:*:{customerNo}");
@@ -79,7 +86,10 @@ namespace DearlerPlatform.Service.ShoppingCartApp
         /// <param name="cartGuid"></param>
         /// <param name="cartSelected"></param>
         /// <returns></returns>
-        public Task<string> UpdateCartSelected(ShoppingCartSelectedEditDto edit, string customerNo)
+    /// <summary>
+    /// 更新购物车条目：仅改“勾选/数量”，数量<=0 视为删除。
+    /// </summary>
+    public Task<string> UpdateCartSelected(ShoppingCartSelectedEditDto edit, string customerNo)
         {
             if (edit.ProductNum <= 0)
             {
@@ -124,7 +134,10 @@ namespace DearlerPlatform.Service.ShoppingCartApp
         /// </summary>
         /// <param name="customerNo"></param>
         /// <returns></returns>
-        public Task<int> GetShoppingCartNum(string customerNo)
+    /// <summary>
+    /// 获取购物车当前总件数（已选/未选都会计入）。
+    /// </summary>
+    public Task<int> GetShoppingCartNum(string customerNo)
         {
             var carts = RedisWorker.GetHashMemory<ShoppingCart>($"cart:*:{customerNo}");
             // var carts = await CartRepo.GetListAsync(m => m.CustomerNo == customerNo && m.CartSelected);

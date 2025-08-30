@@ -6,7 +6,9 @@ namespace DearlerPlatform.Service.CustomerApp
 {
     public partial class CustomerService
     {
-    
+    /// <summary>
+    /// 校验客户登录密码（明文经 MD5 后与库中密文比对）。
+    /// </summary>
         public async Task<bool> CheckPassword(CustomerLoginDto dto){
             var res = await CustomerPwdRepo.GetAsync(m=>m.CustomerNo == dto.CustomerNo && m.CustomerPwd1 == dto.Password.ToMd5());
             if(res !=null) 

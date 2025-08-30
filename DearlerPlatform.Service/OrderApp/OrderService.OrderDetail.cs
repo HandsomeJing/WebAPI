@@ -10,7 +10,9 @@ namespace DearlerPlatform.Service.OrderApp;
 public partial class OrderService
 {
     /// <summary>
-    /// 批量写入订单明细
+    /// 批量写入订单明细：
+    /// - 价格来自 ProductSale（当前无价差，DiffPrice=0）。
+    /// - 冗余 ProductName/PhotoUrl 方便订单详情直接展示。
     /// </summary>
     private async Task AddOrderDetail(List<ShoppingCartDto> carts,
     string customerNo,
@@ -36,6 +38,9 @@ public partial class OrderService
             await OrderDetailRepo.InsertAsync(detail);
         }
     }
+    /// <summary>
+    /// 按订单号获取明细列表（用于详情聚合与汇总件数/金额）。
+    /// </summary>
     private async Task<List<SaleOrderDetail>> GetOrderDetailsByOrderNo(string orderNo)
     {
         return await OrderDetailRepo.GetListAsync(m=>m.SaleOrderNo == orderNo);

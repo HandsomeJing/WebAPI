@@ -55,7 +55,8 @@ namespace DearlerPlatform.Service.OrderApp
         /// <param name="orderNo"></param>
         /// <returns></returns>
     /// <summary>
-    /// 获得订单详情（含汇总与仓库显示字段）
+    /// 获取订单详情（包含明细/进度、件数金额汇总、仓库显示字段）。
+    /// 若主单缺仓库，会按首件商品销售配置回填；最后按需求固定展示发货信息。
     /// </summary>
     /// <param name="orderNo">订单号</param>
     public async Task<SaleOrderDto> GetOrderInfoByOrderNo(string orderNo)
@@ -105,7 +106,7 @@ namespace DearlerPlatform.Service.OrderApp
         }
 
     /// <summary>
-    /// 再次购买：将历史订单的商品回填到指定客户的购物车
+    /// 再次购买：将历史订单的商品回填到指定客户的购物车（不再新建订单）。
     /// </summary>
     /// <param name="SaleOrderNo">历史订单号</param>
     /// <param name="customerNo">客户编号</param>
@@ -130,14 +131,8 @@ namespace DearlerPlatform.Service.OrderApp
             return true;
         }
 
-        /// <summary>
-        /// 获取指定客户最近一笔订单号
-        /// 按下单时间倒序获取第一条记录
-        /// </summary>
-        /// <param name="customerNo">客户编号</param>
-        /// <returns>订单号，若没有则返回空字符串</returns>
     /// <summary>
-    /// 获取指定客户最近一笔订单号
+    /// 获取指定客户最近一笔订单号（按下单时间倒序取第一条）。
     /// </summary>
     public async Task<string> GetLatestOrderNo(string customerNo)
         {
@@ -148,7 +143,7 @@ namespace DearlerPlatform.Service.OrderApp
         }
 
     /// <summary>
-    /// 获取客户最近订单列表（带件数/金额汇总）
+    /// 获取客户最近订单列表（带件数/金额汇总），用于“我的订单”。
     /// </summary>
     public async Task<IEnumerable<SaleOrderDto>> GetOrdersByCustomer(string customerNo, int take = 20)
         {
@@ -171,11 +166,8 @@ namespace DearlerPlatform.Service.OrderApp
             return list;
         }
 
-        /// <summary>
-        /// 取消订单：删除订单主/明细/进度
-        /// </summary>
     /// <summary>
-    /// 取消订单：删除主/明细/进度，并清空该客户购物车
+    /// 取消订单：删除主/明细/进度，并清空该客户购物车。
     /// </summary>
     public async Task<bool> CancelOrder(string saleOrderNo, string customerNo)
         {

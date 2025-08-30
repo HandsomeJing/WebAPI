@@ -18,6 +18,12 @@ using JetBrains.Annotations;
 
 namespace DearlerPlatform.Service.ProductApp
 {
+    /// <summary>
+    /// 商品服务（聚合商品基本信息、图片、销售配置）
+    /// 说明：
+    /// - 被购物车、订单确认等场景调用，用于把“商品详情”补齐给前端/DTO。
+    /// - 内置了一层 Redis 缓存读取，尽量减少数据库压力。
+    /// </summary>
     public partial class ProductService : IProductService
     {
         public ProductService(
@@ -49,6 +55,11 @@ namespace DearlerPlatform.Service.ProductApp
         public DearlerPlatformDbContext Context { get; }
         public IRedisWorker RedisWorker { get; }
 
+    /// <summary>
+    /// 购物车商品“补全”事件处理：
+    /// - 监听本地事件总线，把购物车里的商品号批量查询并回填 ProductDto。
+    /// - 优先从缓存读取，不足的再落库补齐（含图片与售价）。
+    /// </summary>
         public async Task LocalEventHandler(List<ShoppingCartDto> dtos)
         {
             var nos = dtos.Select(d => d.ProductNo);
@@ -61,6 +72,10 @@ namespace DearlerPlatform.Service.ProductApp
             });
         }
 
+    /// <summary>
+    /// 综合查询商品（带筛选/分页/排序），并补充图片与销售配置。
+    /// 用在商品列表页检索。
+    /// </summary>
         public async Task<IEnumerable<ProductDto>> GetProductDto(
             string searchText,
             string productType,
@@ -140,6 +155,10 @@ namespace DearlerPlatform.Service.ProductApp
             return dtos;
         }
 
+    /// <summary>
+    /// 获取一级归属分类（去重）。
+    /// 前端左侧分类筛选用。
+    /// </summary>
         public async Task<List<BlongTypeDto>> GetBlongTypeDtosAsync()
         {
             return await Task.Run(() =>
@@ -155,6 +174,9 @@ namespace DearlerPlatform.Service.ProductApp
 
         }
 
+    /// <summary>
+    /// 查询指定归属分类下的产品类型（TypeName/TypeNo 去重）。
+    /// </summary>
         public async Task<IEnumerable<ProductTypeDto>> GetProductType(string belongTypeName)
         {
             return await Task.Run(() =>
@@ -169,6 +191,10 @@ namespace DearlerPlatform.Service.ProductApp
             });
         }
 
+    /// <summary>
+    /// 获取一组“可筛选属性”的候选值字典。
+    /// Key 形如：字段|中文名，Value 为去重后的可选值列表。
+    /// </summary>
         public async Task<Dictionary<string, IEnumerable<string>>> GetProductProps(string belongTypeName, string? typeNo)
         {
             Dictionary<string, IEnumerable<string>> dicProductType = new();
@@ -192,6 +218,11 @@ namespace DearlerPlatform.Service.ProductApp
             return dicProductType;
         }
         private static object lockObj = new object();
+    /// <summary>
+    /// 批量获取商品（带缓存）：
+    /// - 先从 Redis 命中单品缓存，未命中则读库并回写缓存。
+    /// - 同步补齐图片字段（避免老缓存缺图片导致前端空白）。
+    /// </summary>
         public Task<List<ProductDto>> GetProductByProductNosInCache(params string[] postProductNos)
         {
             List<ProductCto> ctos = new();
@@ -247,6 +278,10 @@ namespace DearlerPlatform.Service.ProductApp
             }
             return Task.FromResult(dtos);
         }
+    /// <summary>
+    /// 直接从数据库按商品号批量获取，并补齐销售配置与图片（无缓存）。
+    /// 适合后台批处理或缓存初始化。
+    /// </summary>
         public async Task<List<ProductDto>> GetProductByProductNos(params string[] postProductNos)
         {
             var productNos = postProductNos.Distinct();
