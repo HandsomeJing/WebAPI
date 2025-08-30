@@ -17,6 +17,27 @@
 - 或命令行：在 `DearlerPlatform.Api` 目录执行 `dotnet watch run`。
 - 默认地址：<http://localhost:7032>（前端通过 /api 代理到此）。
 
+### 快速试用（含数据库/Redis）
+
+1. 启动依赖（Docker）
+
+- 安装 Docker Desktop 后，在仓库根目录执行：
+  - 可选命令：`docker compose up -d`（将启动 SQLServer:1433 与 Redis:6379）
+
+1. 初始化数据库（如果项目包含迁移）
+
+- 在 `DearlerPlatform.Api` 目录执行：
+  - `dotnet ef database update`（或直接运行首次自动迁移逻辑，如果已有）
+
+1. 运行后端
+
+- `dotnet watch run`（监听编译，默认 7032）
+
+1. 运行前端
+
+- 进入 `dearler_platform_ui`，执行 `npm i` 与 `npm run dev`。
+- 浏览器访问显示页；接口通过 `/api` 代理至后端。
+
 ## 前端（dearler_platform_ui 或 dealer-platform-web）
 
 - 技术栈：Vue 3、Vite、Element Plus、Axios、Vue Router。
@@ -32,6 +53,7 @@
 
 - Redis 未启动：后端会降级继续工作；需要时在 appsettings 设置连接串，默认 127.0.0.1:6379。
 - 端口占用：修改 `launchSettings.json` 或 `Properties` 中配置，或改前端代理。
+- 若面试官没有本地数据库/Redis：可使用仓库根的 `docker-compose.yml` 一键启动依赖。
 
 ## 目录说明
 
