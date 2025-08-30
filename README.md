@@ -53,7 +53,7 @@
 
 - Redis 未启动：后端会降级继续工作；需要时在 appsettings 设置连接串，默认 127.0.0.1:6379。
 - 端口占用：修改 `launchSettings.json` 或 `Properties` 中配置，或改前端代理。
-- 若面试官没有本地数据库/Redis：可使用仓库根的 `docker-compose.yml` 一键启动依赖。
+- 若没有本地数据库/Redis：可使用仓库根的 `docker-compose.yml` 一键启动依赖。
 
 ## 目录说明
 
