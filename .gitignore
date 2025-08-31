@@ -93,3 +93,6 @@ tools-local/**
 /docs/
 # 本地笔记（个人速记），请不要推送到远程仓库
 项目速记.Md
+# 本地自动保存 / 自动提交脚本，保留本地即可
+start-auto-save.ps1
+*auto-save*.ps1
