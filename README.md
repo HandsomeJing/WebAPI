@@ -5,6 +5,7 @@
 ## 项目结构
 
 ### 后端服务
+
 - `DearlerPlatform.Api/` - WebAPI 主项目（控制器、配置、启动）
 - `DearlerPlatform.Core/` - 核心层（DbContext、数据访问、分页）
 - `DearlerPlatform.Domain/` - 领域模型（实体类：Product、Order、Customer等）
@@ -13,9 +14,11 @@
 - `DearlerPlatform.Extensions/` - 依赖注入扩展和配置
 
 ### 前端应用
+
 - `dearler_platform_ui/` - Vue3 前端（完整的B2B订货系统界面）
 
 ### 配置文件
+
 - `DearlerPlatform.sln` - Visual Studio 解决方案文件
 - `DearlerPlatform.code-workspace` - VS Code 工作区配置
 - `docker-compose.yml` - Docker 服务编排（数据库等）
@@ -23,6 +26,7 @@
 ## 功能特性
 
 ### 核心业务功能
+
 - 🔐 **用户认证** - 经销商登录、JWT Token认证
 - 📦 **商品管理** - 商品分类、搜索、筛选、属性过滤
 - 🛒 **购物车** - 添加商品、数量调整、选择结算
@@ -31,6 +35,7 @@
 - 🏷️ **开票管理** - 支持多开票人选择
 
 ### 技术特性
+
 - 🏗️ **分层架构** - 清晰的DDD分层设计
 - 📱 **响应式UI** - 移动端适配的Vue3界面
 - 🔄 **状态管理** - Vuex状态管理购物车等数据
@@ -42,6 +47,7 @@
 ## 快速开始
 
 ### 环境要求
+
 - .NET 9 SDK
 - Node.js 16+
 - SQL Server 2019+
@@ -81,16 +87,19 @@ npm run dev
 ## 开发说明
 
 ### API接口
+
 - 所有接口都需要JWT Token认证
 - 通过登录接口获取Token后，前端会自动在请求头中携带
 - 接口文档可通过Swagger查看和测试
 
 ### 数据库配置
+
 - 默认使用SQL Server数据库
 - 连接字符串在 `appsettings.json` 中配置
 - 首次运行会自动创建数据库和表结构
 
 ### 开发调试
+
 - 后端支持热重载：使用 `dotnet watch run`
 - 前端支持热更新：使用 `npm run dev`
 - 建议同时启动后端和前端进行联调
@@ -98,6 +107,7 @@ npm run dev
 ## 项目特色
 
 ### 前端亮点
+
 - 📱 移动端优先的响应式设计
 - 🎨 仿移动电商的用户体验
 - 🔄 实时购物车数量同步
@@ -105,6 +115,7 @@ npm run dev
 - 🏷️ 商品分类和属性筛选
 
 ### 后端亮点
+
 - 🏗️ 清晰的分层架构设计
 - 📦 完整的业务域建模
 - 🔐 JWT Token安全认证
@@ -114,6 +125,7 @@ npm run dev
 ## 技术栈
 
 ### 后端技术
+
 - ASP.NET Core 9
 - Entity Framework Core
 - AutoMapper
@@ -122,6 +134,7 @@ npm run dev
 - Redis (可选)
 
 ### 前端技术
+
 - Vue 3 + Composition API
 - Vite 构建工具
 - Element Plus UI组件
@@ -143,20 +156,20 @@ docker compose up -d
 
  这通常会启动一个 SQL Server 实例和一个 Redis 实例（具体以仓库的 docker-compose.yml 为准）。
 
-2. 初始化数据库（如果你要从迁移启动）：
+1. 初始化数据库（如果你要从迁移启动）：
 
 ```powershell
 cd DearlerPlatform.Api
 dotnet ef database update
 ```
 
-3. 运行后端：
+1. 运行后端：
 
 ```powershell
 dotnet watch run
 ```
 
-4. 运行前端（可选）：按照上文的 Vue 运行步骤启动前端。
+1. 运行前端（可选）：按照上文的 Vue 运行步骤启动前端。
 
 ## 常见问题
 
