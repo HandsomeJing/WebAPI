@@ -1,66 +1,164 @@
-# DearlerPlatform
+# DearlerPlatform 经销商平台
 
-一个包含后端 .NET 9 WebAPI 与前端 Vue3 的一体化示例项目。
+一个经销商B2B订货平台，包含后端 .NET 9 WebAPI 与前端 Vue3 的完整项目。
 
-## 后端（DearlerPlatform.Api）
+## 项目结构
 
-- 技术栈：ASP.NET Core 9、EF Core、AutoMapper、JWT、CORS、Swagger。
-- 关键能力：
-  - 购物车、下单、订单详情（含件数/合计/仓库信息）。
-  - 下单后通过新增 GET 获取“最近一次订单号”，前端跳转详情。
-  - “再次购买”接口支持把历史订单复制到购物车。
-  - Redis 可选，断开时自动降级，不影响主流程。
+### 后端服务
+- `DearlerPlatform.Api/` - WebAPI 主项目（控制器、配置、启动）
+- `DearlerPlatform.Core/` - 核心层（DbContext、数据访问、分页）
+- `DearlerPlatform.Domain/` - 领域模型（实体类：Product、Order、Customer等）
+- `DearlerPlatform.Service/` - 业务服务层（应用服务、业务逻辑）
+- `DearlerPlatform.Common/` - 公共组件（Redis、Token、MD5、事件总线）
+- `DearlerPlatform.Extensions/` - 依赖注入扩展和配置
 
-启动：
+### 前端应用
+- `dearler_platform_ui/` - Vue3 前端（完整的B2B订货系统界面）
 
-- VS Code 任务：build / publish / watch。
-- 或命令行：在 `DearlerPlatform.Api` 目录执行 `dotnet watch run`。
-- 默认地址：<http://localhost:7032>（前端通过 /api 代理到此）。
+### 配置文件
+- `DearlerPlatform.sln` - Visual Studio 解决方案文件
+- `DearlerPlatform.code-workspace` - VS Code 工作区配置
+- `docker-compose.yml` - Docker 服务编排（数据库等）
 
-### 快速试用（含数据库/Redis）
+## 功能特性
+
+### 核心业务功能
+- 🔐 **用户认证** - 经销商登录、JWT Token认证
+- 📦 **商品管理** - 商品分类、搜索、筛选、属性过滤
+- 🛒 **购物车** - 添加商品、数量调整、选择结算
+- 📋 **订单管理** - 下单确认、订单列表、订单详情
+- 💰 **价格计算** - 实时价格计算、合计统计
+- 🏷️ **开票管理** - 支持多开票人选择
+
+### 技术特性
+- 🏗️ **分层架构** - 清晰的DDD分层设计
+- 📱 **响应式UI** - 移动端适配的Vue3界面
+- 🔄 **状态管理** - Vuex状态管理购物车等数据
+- 🌐 **API设计** - RESTful API设计规范
+- 💾 **数据持久化** - Entity Framework Core + SQL Server
+- ⚡ **性能优化** - Redis缓存、分页查询
+- 🔧 **开发工具** - AutoMapper、Swagger文档
+
+## 快速开始
+
+### 环境要求
+- .NET 9 SDK
+- Node.js 16+
+- SQL Server 2019+
+- Redis（可选，用于缓存）
+
+### 后端启动
+
+```powershell
+# 进入API项目目录
+cd DearlerPlatform.Api
+
+# 还原依赖包
+dotnet restore
+
+# 启动开发服务器
+dotnet watch run
+```
+
+后端服务地址：`http://localhost:7032`
+Swagger文档：`http://localhost:7032/swagger`
+
+### 前端启动
+
+```powershell
+# 进入前端项目目录
+cd dearler_platform_ui
+
+# 安装依赖
+npm install
+
+# 启动开发服务器
+npm run dev
+```
+
+前端访问地址：`http://localhost:3000`
+
+## 开发说明
+
+### API接口
+- 所有接口都需要JWT Token认证
+- 通过登录接口获取Token后，前端会自动在请求头中携带
+- 接口文档可通过Swagger查看和测试
+
+### 数据库配置
+- 默认使用SQL Server数据库
+- 连接字符串在 `appsettings.json` 中配置
+- 首次运行会自动创建数据库和表结构
+
+### 开发调试
+- 后端支持热重载：使用 `dotnet watch run`
+- 前端支持热更新：使用 `npm run dev`
+- 建议同时启动后端和前端进行联调
+
+## 项目特色
+
+### 前端亮点
+- 📱 移动端优先的响应式设计
+- 🎨 仿移动电商的用户体验
+- 🔄 实时购物车数量同步
+- 📋 完整的订单流程
+- 🏷️ 商品分类和属性筛选
+
+### 后端亮点
+- 🏗️ 清晰的分层架构设计
+- 📦 完整的业务域建模
+- 🔐 JWT Token安全认证
+- 📊 支持分页和排序
+- 🚀 高性能的数据访问层
+
+## 技术栈
+
+### 后端技术
+- ASP.NET Core 9
+- Entity Framework Core
+- AutoMapper
+- JWT Authentication
+- Swagger/OpenAPI
+- Redis (可选)
+
+### 前端技术
+- Vue 3 + Composition API
+- Vite 构建工具
+- Element Plus UI组件
+- Vue Router 路由管理
+- Vuex 状态管理
+- Axios HTTP客户端
+
+## 许可证
+
+本项目仅供学习和参考使用。
 
 1. 启动依赖（Docker）
 
-- 安装 Docker Desktop 后，在仓库根目录执行：
-  - 可选命令：`docker compose up -d`（将启动 SQLServer:1433 与 Redis:6379）
+- 在仓库根目录运行（需要 Docker）：
 
-1. 初始化数据库（如果项目包含迁移）
+```powershell
+docker compose up -d
+```
 
-- 在 `DearlerPlatform.Api` 目录执行：
-  - `dotnet ef database update`（或直接运行首次自动迁移逻辑，如果已有）
+ 这通常会启动一个 SQL Server 实例和一个 Redis 实例（具体以仓库的 docker-compose.yml 为准）。
 
-1. 运行后端
+2. 初始化数据库（如果你要从迁移启动）：
 
-- `dotnet watch run`（监听编译，默认 7032）
+```powershell
+cd DearlerPlatform.Api
+dotnet ef database update
+```
 
-1. 运行前端
+3. 运行后端：
 
-- 进入 `dearler_platform_ui`，执行 `npm i` 与 `npm run dev`。
-- 浏览器访问显示页；接口通过 `/api` 代理至后端。
+```powershell
+dotnet watch run
+```
 
-## 前端（dearler_platform_ui 或 dealer-platform-web）
-
-- 技术栈：Vue 3、Vite、Element Plus、Axios、Vue Router。
-- 主要页面：登录、商品列表、购物车、下单确认、订单详情。
-- 已移除：商品详情页（后续增强再启用）。
-
-开发：
-
-- 进入对应前端目录，执行 `npm i` 后 `npm run dev`。
-- 本地开发使用 Vite 代理：`/api -> http://localhost:7032`。
+4. 运行前端（可选）：按照上文的 Vue 运行步骤启动前端。
 
 ## 常见问题
 
-- Redis 未启动：后端会降级继续工作；需要时在 appsettings 设置连接串，默认 127.0.0.1:6379。
-- 端口占用：修改 `launchSettings.json` 或 `Properties` 中配置，或改前端代理。
-- 若没有本地数据库/Redis：可使用仓库根的 `docker-compose.yml` 一键启动依赖。
-
-## 目录说明
-
-- `DearlerPlatform.Api/` 后端 WebAPI
-- `dearler_platform_ui/` 前端（较完整 UI）
-- `dealer-platform-web/` 前端（早期目录，已忽略构建产物与依赖）
-
-## 许可
-
-内部示例项目，按需使用。
+- Redis 未启动：后端有降级逻辑，主流程仍能工作；若需要缓存功能请在 `appsettings` 中配置 Redis 连接。
+- 端口占用：修改项目的 `launchSettings.json` 或后端监听地址，前端代理也可调整。

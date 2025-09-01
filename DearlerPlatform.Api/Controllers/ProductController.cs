@@ -39,6 +39,7 @@ public class ProductController : BaseController
     /// <param name="pageSize">每页数量 - 默认30条</param>
     /// <param name="orderType">排序方式 - 升序或降序</param>
     [HttpGet]
+    [AllowAnonymous]
     public async Task<IEnumerable<ProductDto>> GetProductDtosAsync(
         string? searchText,
         string? productType,
